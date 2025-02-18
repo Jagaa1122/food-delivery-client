@@ -55,3 +55,19 @@ type UserRoleEnum = {
   USER: USER;
   ADMIN: Admin;
 };
+
+type singupprops = {
+  currentStep: number;
+  onClick: () => void;
+  goBack: () => void;
+  onChange: () => void;
+};
+
+type Inputprops = {
+  label : string;
+  placeholder: string;
+  errortext: string;
+  name: string;
+  onChange: () => void;
+  type: string;
+}
