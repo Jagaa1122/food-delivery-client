@@ -26,16 +26,16 @@ type FoodOrder = {
   user: string;
   totalPrice: number;
   foodOrderItems: FoodOrderItem[];
-  status: FoodOrderStatusEnum;
+  // status: FoodOrderStatusEnum;
   createdAt: Date;
   updated: Date;
 };
 
-type FoodOrderStatusEnum = {
-  PENDING: PENDING;
-  CANCELED: CANCELED;
-  DELIVERED: DELIVERED;
-};
+// type FoodOrderStatusEnum = {
+//   PENDING: PENDING;
+//   CANCELED: CANCELED;
+//   DELIVERED: DELIVERED;
+// };
 
 type User = {
   _id: string;
@@ -43,7 +43,7 @@ type User = {
   password: string;
   phoneNumber: string;
   address: string;
-  role: UserRoleEnum;
+  // role: UserRoleEnum;
   orderedFoods: string;
   ttl: Date;
   isVerified: Boolean;
@@ -51,10 +51,10 @@ type User = {
   updated: Date;
 };
 
-type UserRoleEnum = {
-  USER: USER;
-  ADMIN: Admin;
-};
+// type UserRoleEnum = {
+//   USER: USER;
+//   ADMIN: Admin;
+// };
 
 type singupprops = {
   currentStep: number;

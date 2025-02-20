@@ -31,12 +31,12 @@ export function CarouselSize() {
       opts={{
         align: "start",
       }}
-      className="w-[95%]"
+      className=" w-full"
     >
       <CarouselContent>
         {Arrays.map((item, index) => (
           <CarouselItem key={index} className="basis-1/9">
-            <div className="h-9 w-full flex justify-center px-7 items-center text-white bg-black rounded-full">
+            <div className="h-9 w-full flex justify-center px-7 items-center text-black bg-white rounded-full">
               {item.num}
             </div>
           </CarouselItem>

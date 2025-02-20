@@ -3,8 +3,8 @@ import Image from "next/image";
 export default function Footer() {
   return (
     <div className="bg-primary w-full h-[775px] flex flex-col items-center justify-start gap-40 py-16">
-      <div className="flex gap-10 h-[100px] w-[100vw] justify-center items-center text-[25px] bg-[#ef4444] text-white">
-        <p>Fresh fast delivered</p>
+      <div className="text-nowrap flex gap-10 h-[100px] w-[100vw] justify-center items-center text-[25px] bg-[#ef4444] text-white">
+        <p >Fresh fast delivered</p>
         <p>Fresh fast delivered</p>
         <p>Fresh fast delivered</p>
         <p>Fresh fast delivered</p>
