@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
-import SignUp1 from "../_components/SignUp1";
-import SignUp2 from "../_components/SignUp2";
-import { UploadCloudinary } from "../_components/CloudinaryUpload";
+import SignUp1 from "./SignUp1";
+import SignUp2 from "./SignUp2";
+import { UploadCloudinary } from "../../_components/CloudinaryUpload";
 
 export default function Home() {
   const [currentStep, setCurrentStep] = useState(0);

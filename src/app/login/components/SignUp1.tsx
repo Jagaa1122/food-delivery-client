@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import { useState } from "react";
-import Input from "./Input";
+import Input from "@/app/_components/Input";
 import Image from "next/image";
 
 export default function SignUp1({ currentStep, onClick }: singupprops) {
