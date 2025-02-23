@@ -12,7 +12,7 @@ export function FirstStep() {
   return (
     <div>
       <div className=" bg-[#18181B] flex justify-between items-center  p-[20px] sticky top-0  z-50 ">
-        <Link href={`http://localhost:3001/`}>
+        <Link href={`http://localhost:3000/`}>
           <Image
             alt={"logo"}
             width={100}
@@ -21,7 +21,7 @@ export function FirstStep() {
           />
         </Link>
         <div className="flex gap-2">
-          <Link href="http://localhost:3000/login/components">
+          <Link href="http://localhost:3000/login">
             <Button className="delivery-address-btn bg-white w-[100px] h-[36px] rounded-[18px] p-0">
               <div className="text-black text-[12px]">Sign up</div>
             </Button>

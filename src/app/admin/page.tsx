@@ -1,10 +1,22 @@
-import Image from "next/image";
-import { CarouselSize } from "../_components/Carousel";
+"use client"
 
-export default function Home() {
+import { Sidebar } from "lucide-react";
+import Logo from "./_components/Logo";
+
+
+
+
+const Page = () => {
   return (
-    <div className="bg-slate-400 w-[800px] ">
-      <CarouselSize />
+  <div className="flex">
+    
+    <p>Hello Test</p>
+    <Logo />
     </div>
   );
-}
+};
+
+
+
+export default Page;
+

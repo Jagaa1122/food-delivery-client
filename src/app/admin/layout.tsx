@@ -1,16 +1,26 @@
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "./_components/AppSidebar";
-import Image from "next/image";
+import React,{ ReactNode } from "react";
+import Logo from "./_components/Logo";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  return (
-    <SidebarProvider>
-      <AppSidebar />
-      <main>
-        <SidebarTrigger />
 
-        {children}
-      </main>
-    </SidebarProvider>
-  );
-}
+type Props= { children: ReactNode;
+};
+
+const Sidebar = () => {
+    return (
+      <div className="w-[205px] min-h-[100vh]">
+        <Logo/>
+  
+      </div>
+    );
+  };
+   
+const Layout = (props: Props) => {
+    return (
+    <div className="flex">
+        <Sidebar/>
+    {props.children}
+    </div>
+    );
+};
+
+export default Layout;

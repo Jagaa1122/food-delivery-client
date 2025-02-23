@@ -4,10 +4,11 @@ export default function Logo() {
   return (
     <div className="flex gap-3">
       <Image
-        width={40}
-        height={40}
+       className="w-[36px] h-[29px]"
+        width={36}
+        height={29}
         alt="logo"
-        src="https://res.cloudinary.com/dlvvsmj6j/image/upload/v1739974771/cqpoxwrkvc9xlnhwaafj.png"
+        src="/menu.svg"
       />
       <div>
         <h2 className="text-black">
