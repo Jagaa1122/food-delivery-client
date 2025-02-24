@@ -1,10 +1,13 @@
 "use client";
 
-import { Sidebar } from "lucide-react";
-import Logo from "./_components/Logo";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
-const Page = () => {
-  return <div className="flex"></div>;
-};
+export default function Home() {
+  const router = useRouter();
 
-export default Page;
+  useEffect(() => {
+    router.push("/admin/food-menu");
+  }, [router]);
+
+  return null; }

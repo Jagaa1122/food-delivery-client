@@ -20,7 +20,7 @@ export default function Logo() {
         <p className="text-[12px]">Swift delivery</p>
       </div>
       <div className="flex flex-col mt-10 gap-6">
-        <Link href="/foodmenu">
+        <Link href="/admin/food-menu">
           <div>
             <Toggle className="h-10 w-[165px] rounded-full py-2 px-6 flex justify-start gap-[10px] ">
               <LayoutDashboard />
@@ -28,7 +28,7 @@ export default function Logo() {
             </Toggle>
           </div>
         </Link>
-        <Link href={"/orders"}>
+        <Link href={"/admin/orders"}>
           <div>
             <Toggle className="h-10 w-full flex py-2 px-6 justify-start gap-[10px] rounded-full">
               <Truck />
@@ -37,10 +37,17 @@ export default function Logo() {
           </div>
         </Link>
 
-        <Toggle className="h-10 w-full py-2 px-6 flex justify-start gap-[10px] rounded-full">
-          <Settings />
-          Settings
-        </Toggle>
+
+        <Link href={"/admin/settings"}>
+          <div>
+            <Toggle className="h-10 w-full py-2 px-6 flex justify-start gap-[10px] rounded-full">
+              <Settings />
+              Settings
+            </Toggle>
+          </div>
+        </Link>
+
+
       </div>
     </div>
   );
