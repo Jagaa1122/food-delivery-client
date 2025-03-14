@@ -1,21 +1,20 @@
 "use client";
 import { useState, useEffect } from "react";
+import { AddCategory } from "./AddCategory";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Toggle } from "@/components/ui/toggle";
 
 export default function DishCategories() {
-  const [categories, setCategories] = useState<any[]>([]);
-  const [value, setValue] = useState("");
-
+  const [categories, setCategories] = useState<FoodCategory[] | null>(null);
+  const [open, setOpen] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+  const [saveID, setSaveID] = useState<string>("");
 
   const getCategories = async () => {
     const data = await fetch("http://localhost:2000/category");
@@ -28,75 +27,107 @@ export default function DishCategories() {
   }, []);
   console.log("jghjghj", categories);
 
-  const createCategory = async (value: string) => {
+  const createCategory = async (category: string) => {
     try {
-      const response = await fetch("http://localhost:2000/category", {
+      await fetch("http://localhost:2000/category", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ categoryName: value }),
+        body: JSON.stringify({ categoryName: category }),
       });
 
-      if (response.ok) {
-        // Clear the input
-        setValue("");
-        // Fetch the updated list instead of trying to update it manually
-        await getCategories();
-      } else {
-        alert("Failed to add category");
-      }
+      getCategories();
     } catch (error) {
       console.error("Error adding category:", error);
       alert("An error occurred");
     }
   };
-  const handleAddCategory = () => {
-    if (value.trim() === "") {
-      alert("Category name missing");
-      return;
+  const deleteCategory = async (categoryId: string) => {
+    try {
+      await fetch(`http://localhost:2000/category/${categoryId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ categoryName: categoryId }),
+      });
+      getCategories();
+    } catch (error) {
+      console.log("Error", error);
+      alert("Error in deleteCategory");
     }
-    createCategory(value);
+  };
+  const updateCategory = async (categoryId: string, categoryName: string) => {
+    try {
+      await fetch(`http://localhost:2000/category/${categoryId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ categoryName: categoryName }),
+      });
+      getCategories();
+    } catch (error) {
+      console.log("Error", error);
+      alert("Error in updateCategory");
+    }
+  };
+
+  const EditHandleClick = (id: string) => {
+    setOpen(true);
+    setIsEdit(true);
+    setSaveID(id);
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full flex flex-col gap-6">
+      <Avatar className="self-end">
+        <AvatarImage src="https://github.com/shadcn.png" />
+        <AvatarFallback>CN</AvatarFallback>
+      </Avatar>
+
       <div className=" bg-white rounded-xl mb-[20px] p-[20px]">
         <h1 className="text-[24px] font-bold "> Dishes Category</h1>
         <div className="flex flex-wrap gap-3">
-          {categories?.map((category) => (
-            <div className="border-[1px] border-[#e4e4e7] rounded-[16px] px-4 py-1 text-[14px]" key={category._id}>{category.categoryName}</div>
-          ))}
-          <Dialog>
-
-            <DialogTrigger className="w-[30px] h-[30px] rounded-[15px] bg-[#EF4444] text-white p-0">
-              +
-            </DialogTrigger>
-
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle className="mb-[24px]">
-                  Add a new category
-                </DialogTitle>
-              </DialogHeader>
-
-              <div className="flex gap-[24px] mb-[24px]">
-                <div className="grid w-full max-w-sm items-center gap-1.5">
-                  <Label
-                    className="text-black font-bold"
-                    htmlFor="categoryName"
+          {categories?.map((category) => {
+            return (
+              <ContextMenu key={category._id}>
+                <ContextMenuTrigger>
+                  <Toggle
+                    variant={"outline"}
+                    className="py-2 px-4 rounded-full "
                   >
-                    Category name
-                  </Label>
-                  <Input type="text" name="categoryName" id="categoryName" value={value}
-                    onChange={(e) => setValue(e.target.value)} />
-                </div>
-              </div>
-              <div className="text-end">
-                <Button type="button" onClick={handleAddCategory}>Add category</Button>
-              </div>
-            </DialogContent>
-          </Dialog>
+                    {category.categoryName}
+                  </Toggle>
+                </ContextMenuTrigger>
+                <ContextMenuContent className="mt-5 ">
+                  <ContextMenuItem
+                    onClick={() => EditHandleClick(category._id)}
+                    className="cursor-pointer "
+                  >
+                    Edit
+                  </ContextMenuItem>
+                  <ContextMenuItem
+                    className="cursor-pointer "
+                    onClick={() => deleteCategory(category._id)}
+                  >
+                    Delete
+                  </ContextMenuItem>
+                </ContextMenuContent>
+              </ContextMenu>
+            );
+          })}
+
+          <AddCategory
+            createCategories={createCategory}
+            updateCategory={updateCategory}
+            isEdit={isEdit}
+            setIsEdit={setIsEdit}
+            saveID={saveID}
+            setOpen={setOpen}
+            open={open}
+          />
         </div>
       </div>
     </div>

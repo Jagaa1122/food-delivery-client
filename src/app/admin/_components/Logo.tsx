@@ -13,7 +13,7 @@ export default function Logo() {
         alt="logo"
         src="/menu.svg"
       />
-      <div>
+      <div className="">
         <h2 className="text-black text-[18px] font-[600]">
           Nom<span className="text-black">Nom</span>
         </h2>
@@ -37,7 +37,6 @@ export default function Logo() {
           </div>
         </Link>
 
-
         <Link href={"/admin/settings"}>
           <div>
             <Toggle className="h-10 w-full py-2 px-6 flex justify-start gap-[10px] rounded-full">
@@ -46,8 +45,6 @@ export default function Logo() {
             </Toggle>
           </div>
         </Link>
-
-
       </div>
     </div>
   );
