@@ -19,7 +19,7 @@ import { Pencil, Trash2 } from "lucide-react";
 
 const Page = () => {
   const [categories, setCategories] = useState<any[]>([]);
-  const [dishes, setDishes] = useState<any[]>([]);
+  const [dishes, setDishes] = useState<Food[]>([]);
   const [categoryDialogOpen, setCategoryDialogOpen] = useState(false);
   const [isEditCategory, setIsEditCategory] = useState(false);
   const [currentCategoryId, setCurrentCategoryId] = useState("");
@@ -43,19 +43,20 @@ const Page = () => {
   }, []);
 
   // // Fetch dishes
-  // const getDishes = async () => {
-  //   try {
-  //     const response = await fetch("http://localhost:2000/getFood");
-  //     const jsonData = await response.json();
-  //     setDishes(jsonData.data);
-  //   } catch (error) {
-  //     console.error("Error fetching categories:", error);
-  //   }
-  // };
+  const getDishes = async () => {
+    try {
+      const response = await fetch("http://localhost:2000/food");
+      const jsonData = await response.json();
+      console.log("dish bn", jsonData);
+      setDishes(jsonData.getfood);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
 
-  // useEffect(() => {
-  //   getDishes();
-  // }, []);
+  useEffect(() => {
+    getDishes();
+  }, []);
 
   // Create new category
   const createCategory = async () => {
@@ -150,6 +151,7 @@ const Page = () => {
 
         <div className="bg-white rounded-xl mb-[20px] p-[20px]">
           <h1 className="text-[24px] font-bold">Dishes Category</h1>
+
           <div className="flex flex-wrap gap-3">
             {categories?.map((category) => (
               <Toggle
@@ -169,7 +171,7 @@ const Page = () => {
               <DialogTrigger asChild>
                 <Toggle
                   variant="outline"
-                  className="py-2 px-4 rounded-full cursor-pointer bg-[#EF4444]"
+                  className="py-2 px-4 rounded-full cursor-pointer bg-[#EF4444] text-white"
                   onClick={() => {
                     setIsEditCategory(false);
                     setCategoryName("");
@@ -342,7 +344,20 @@ const Page = () => {
                 <p>Add a new dish to {category.categoryName}</p>
               </div>
 
-              <div>hool</div>
+              <div>
+                {dishes
+                  ?.filter((dish) => dish.category === category._id)
+                  .map((dish) => {
+                    return (
+                      <div
+                        className="w-[250px] h-[200px] bg-slate-500"
+                        key={dish._id}
+                      >
+                        <img src={dish.image} />
+                      </div>
+                    );
+                  })}
+              </div>
             </div>
           </div>
         ))}
