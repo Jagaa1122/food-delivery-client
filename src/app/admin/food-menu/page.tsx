@@ -51,7 +51,7 @@ const Page = () => {
   const [categoryName, setCategoryName] = useState("");
   const [open, setOpen] = useState<boolean>(false);
   const [file, setFile] = useState<any>(null);
-  const [imageUrl, setImageUrl] = useState<any>(null);
+  const [imageUrl, setImageUrl] = useState<string|null>(null);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -182,6 +182,11 @@ const Page = () => {
       setImageUrl(URL.createObjectURL(file));
     }
   };
+
+  const temImageUrl = URL.createObjectURL(file);
+  setPreviewUrl(temImageUrl);
+  form.setValue("image", "uploaded");
+};
   const deleteImage = () => {
     setPreviewUrl(null);
   };
