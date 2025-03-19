@@ -5,7 +5,9 @@ import { Toggle } from "@/components/ui/toggle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { ImageIcon, Plus, X } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Dialog,
   DialogContent,
@@ -14,8 +16,31 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import Image from "next/image";
 import { Pencil, Trash2 } from "lucide-react";
+import { z } from "zod";
+
+const formSchema = z.object({
+  foodName: z.string().min(2, {
+    message: "Food name minimum 2 letter required",
+  }),
+  price: z
+    .string({
+      message: "Price is required",
+    })
+    .min(1, "Please price is required"),
+  ingredients: z.string().min(2, "Ingredients must contain at least 2 text"),
+  category: z.string(),
+  image: z.string().nonempty("Zuragaa oruulna uu !"),
+});
 
 const Page = () => {
   const [categories, setCategories] = useState<any[]>([]);
@@ -24,8 +49,19 @@ const Page = () => {
   const [isEditCategory, setIsEditCategory] = useState(false);
   const [currentCategoryId, setCurrentCategoryId] = useState("");
   const [categoryName, setCategoryName] = useState("");
+  const [open, setOpen] = useState<boolean>(false);
   const [file, setFile] = useState<any>(null);
   const [imageUrl, setImageUrl] = useState<any>(null);
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      foodName: "",
+      price: "",
+      ingredients: "",
+      category: "",
+      image: "",
+    },
+  });
 
   // Fetch categories
   const getCategories = async () => {
@@ -57,6 +93,12 @@ const Page = () => {
   useEffect(() => {
     getDishes();
   }, []);
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    createCategory(values);
+    setOpen(false);
+    form.reset();
+  }
 
   // Create new category
   const createCategory = async () => {
@@ -139,6 +181,9 @@ const Page = () => {
       setFile(file);
       setImageUrl(URL.createObjectURL(file));
     }
+  };
+  const deleteImage = () => {
+    setPreviewUrl(null);
   };
 
   return (
@@ -245,99 +290,153 @@ const Page = () => {
                   </DialogTrigger>
 
                   <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle className="mb-[24px]">
-                        Add new Dish to {category.categoryName}
-                      </DialogTitle>
-                      <DialogDescription></DialogDescription>
-                    </DialogHeader>
+                    <DialogHeader hidden></DialogHeader>
+                    <DialogTitle hidden></DialogTitle>
 
-                    <div className="flex gap-[24px] mb-[24px]">
-                      <div className="grid w-full max-w-sm items-center gap-1.5">
-                        <Label
-                          className="text-black font-bold"
-                          htmlFor="foodname"
-                        >
-                          Food name
-                        </Label>
-                        <Input type="text" id="foodname" placeholder="" />
-                      </div>
-                      <div className="grid w-full max-w-sm items-center gap-1.5">
-                        <Label
-                          className="text-black font-bold"
-                          htmlFor="foodprice"
-                        >
-                          Food price
-                        </Label>
-                        <Input type="text" id="foodprice" placeholder="" />
-                      </div>
-                    </div>
-
-                    <div className="grid w-full items-center gap-1.5 mb-[24px]">
-                      <Label
-                        className="text-black font-bold"
-                        htmlFor="ingridients"
+                    <Form {...form}>
+                      <form
+                        onSubmit={form.handleSubmit(onSubmit)}
+                        className="w-[460px]  flex flex-col items-start gap-6  "
                       >
-                        Ingridients
-                      </Label>
-                      <Textarea id="ingridients" />
-                    </div>
-                    <div>
-                      <div className="mt-1 flex gap-1">
-                        <label
-                          htmlFor="file-input"
-                          className="text-[14px] font-semibold ml-2 flex flex-col"
-                        >
-                          Food image
-                        </label>
-                      </div>
-                      <div className="flex flex-col mt-1 mb-5">
-                        <label
-                          htmlFor="file-input"
-                          className="bg-gray-100 rounded-xl w-full h-[150px] flex flex-col justify-center items-center cursor-pointer border-[1px] border-gray"
-                        >
-                          <input
-                            hidden
-                            type="file"
-                            id="file-input"
-                            onChange={onFileUpload}
-                          />
+                        <div className="w-full pb-4 flex justify-center items-center gap-[10px] ">
+                          <h4 className="text-[18px] font-[600] leading-[28px]  ">
+                            Add new Dish to {categoryName}
+                          </h4>
+                        </div>
 
-                          {!imageUrl ? (
-                            <div className="flex flex-col justify-center items-center gap-2">
-                              <div className="w-10 h-10 bg-white rounded-full flex justify-center items-center">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="18"
-                                  height="18"
-                                  viewBox="0 0 12 12"
-                                  fill="none"
-                                >
-                                  <path
-                                    d="M9.5 2.5V9.5H2.5V2.5H9.5ZM9.5 1.5H2.5C1.95 1.5 1.5 1.95 1.5 2.5V9.5C1.5 10.05 1.95 10.5 2.5 10.5H9.5C10.05 10.5 10.5 10.05 10.5 9.5V2.5C10.5 1.95 10.05 1.5 9.5 1.5ZM7.07 5.93L5.57 7.865L4.5 6.57L3 8.5H9L7.07 5.93Z"
-                                    fill="#202124"
+                        <div className="flex gap-6 items-start ">
+                          <div className="flex flex-col gap-2 items-start h-[60px] w-full ">
+                            <h4 className="text-[14px] font-[500] leading-[14px] ">
+                              Food name
+                            </h4>
+                            <FormField
+                              control={form.control}
+                              name="foodName"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormControl>
+                                    <Input
+                                      placeholder="Type food name"
+                                      className="w-full "
+                                      {...field}
+                                    />
+                                  </FormControl>
+
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                          <div className="flex flex-col gap-2 items-start h-[60px] w-full ">
+                            <h4 className="text-[14px] font-[500] leading-[14px] ">
+                              Food price
+                            </h4>
+                            <FormField
+                              control={form.control}
+                              name="price"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormControl>
+                                    <Input
+                                      placeholder="Enter price..."
+                                      className="w-full "
+                                      {...field}
+                                    />
+                                  </FormControl>
+
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="w-full h-[60px] flex flex-col gap-[8px] ">
+                          <p className="text-[14px] leading-[14px] font-[500] ">
+                            Ingredients
+                          </p>
+                          <FormField
+                            control={form.control}
+                            name="ingredients"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormControl>
+                                  <Input
+                                    placeholder="List ingredients..."
+                                    className="w-full py-2 px-3 "
+                                    {...field}
                                   />
-                                </svg>
-                              </div>
-                              <span>Choose a file or drag & drop it here</span>
-                            </div>
-                          ) : (
-                            <div className="flex flex-col justify-center items-center h-[150px] w-full gap-2">
-                              <Image
-                                src={imageUrl}
-                                alt="Uploaded"
-                                width={1000}
-                                height={1000}
-                                className="object-cover size-full rounded-lg bg-cover bg-no-repeat bg-center"
-                              />
-                            </div>
-                          )}
-                        </label>
-                      </div>
-                    </div>
-                    <div className="text-end">
-                      <Button>Add dish</Button>
-                    </div>
+                                </FormControl>
+
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+
+                        <div className="h-[160px] w-full flex flex-col gap-2 ">
+                          <h4 className="text-[14px] font-[500] leading-[14px] ">
+                            Food image
+                          </h4>
+                          <FormField
+                            control={form.control}
+                            name="image"
+                            render={({
+                              field: { onChange, value, ...rest },
+                            }) => (
+                              <FormItem>
+                                <FormControl>
+                                  {imageUrl ? (
+                                    <div className="w-full h-full relative ">
+                                      <div className="h-[138px]">
+                                        <Image
+                                          alt="file-input"
+                                          src={imageUrl}
+                                          width={1000}
+                                          height={1000}
+                                          className={
+                                            "size-full object-cover rounded-md border border-dashed border-blue-500/20 bg-blue-500/5 bg-cover bg-no-repeat bg-center"
+                                          }
+                                        />
+                                      </div>
+                                      <Button
+                                        onClick={deleteImage}
+                                        className="absolute top-2 right-2 rounded-full w-9 h-9  "
+                                      >
+                                        <X />
+                                      </Button>
+                                    </div>
+                                  ) : (
+                                    <label
+                                      htmlFor="file-input"
+                                      className={`flex flex-col h-[138px] items-center justify-center cursor-pointer gap-2 p-4  rounded-md border border-dashed border-blue-500/20 bg-blue-500/5 `}
+                                    >
+                                      <div className="p-2 bg-[#fff] rounded-full">
+                                        <ImageIcon className=" w-4 h-4 " />{" "}
+                                      </div>
+                                      Choose a file or drag & drop it here
+                                      <Input
+                                        id="file-input"
+                                        type="file"
+                                        {...rest}
+                                        onChange={onFileUpload}
+                                        className="hidden"
+                                      />
+                                    </label>
+                                  )}
+                                </FormControl>
+
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+
+                        <div className="w-full pt-6 flex items-center justify-end ">
+                          <Button type="submit">Add Dish</Button>
+                        </div>
+                      </form>
+                    </Form>
                   </DialogContent>
                 </Dialog>
 
