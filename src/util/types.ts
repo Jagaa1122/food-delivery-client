@@ -1,12 +1,9 @@
 type Food = {
-  _id: string;
   foodName: string;
-  price: number;
+  price: string;
   image: string;
   ingredients: string;
   category: string;
-  createdAt: Date;
-  updated: Date;
 };
 
 type FoodCategory = {
@@ -64,10 +61,10 @@ type singupprops = {
 };
 
 type Inputprops = {
-  label : string;
+  label: string;
   placeholder: string;
   errortext: string;
   name: string;
   onChange: () => void;
   type: string;
-}
+};
